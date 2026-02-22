@@ -1,4 +1,4 @@
-# Ollama MCP Project
+# Openweb UI LLama GO(mcpserver)
 
 Este projeto demonstra a integração entre **LLMs (Large Language Models)** rodando localmente e **ferramentas externas** (Tools) utilizando o protocolo **MCP (Model Context Protocol)**.
 
