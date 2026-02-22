@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+    restart: always
+    # Descomente abaixo para GPU NVIDIA
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_LOG_LEVEL=info
+      # Garante que o servidor escute em todas as interfaces e na porta correta
+      - HOST=0.0.0.0
+      - PORT=8080
+    volumes:
+      - open-webui_storage:/app/backend/data
+    restart: always
+    depends_on:
+      - ollama
+      - mcp-calc
+
+  mcp-calc:
+    build: ./mcp-calc
+    container_name: mcp-calc
+    ports:
+      - "8081:8080"
+    environment:
+      - MCP_BASE_URL=http://mcp-calc:8080
+    restart: always
+
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    container_name: mcpo
+    ports:
+      - "8002:8000"
+    # Informa ao proxy para usar SSE e aponta para a sua calculadora
+    command: [ "--server-type", "sse", "--", "http://mcp-calc:8080/sse" ]
+    restart: always
+    depends_on:
+      - mcp-calc
+
+
+
+volumes:
+  ollama_storage:
+  open-webui_storage:
