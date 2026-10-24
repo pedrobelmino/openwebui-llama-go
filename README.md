@@ -40,8 +40,8 @@ O projeto é composto por quatro serviços principais orquestrados via Docker Co
 
 1.  **Clone o repositório:**
     ```bash
-    git clone <seu-repo-url>
-    cd ollama-mcp-project
+    git clone https://github.com/pedrobelmino/openwebui-llama-go.git
+    cd openwebui-llama-go
     ```
 
 2.  **Suba os containers:**
@@ -89,3 +89,7 @@ Para modificar a lógica da calculadora:
     ```bash
     docker-compose up -d --build mcp-calc
     ```
+
+## Licença
+
+MIT — veja [LICENSE](LICENSE).
